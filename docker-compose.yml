@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  transcoder:
+    build: .
+    container_name: transcodeflow_service
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+
+    ports:
+      - "8080:8080"
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+    restart: unless-stopped
